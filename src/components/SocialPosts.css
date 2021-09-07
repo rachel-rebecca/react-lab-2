@@ -11,6 +11,7 @@ main {
     background:lightgrey;
     padding: none;
     font-family: "Dosis", sans-serif;
+    margin-top: 20px;
 }
 
 .postDiv {
