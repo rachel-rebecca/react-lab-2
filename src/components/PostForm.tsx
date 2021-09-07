@@ -6,17 +6,17 @@ import "./PostForm.css";
 
 function PostForm ({
     onSubmit,
-    setTitle,
-    setThought,
+   
 }: {
-    onSubmit: () => void;
-    setTitle: React.Dispatch<React.SetStateAction<string>>;
-    setThought: React.Dispatch<React.SetStateAction<string>>;
+    onSubmit: (title: string, thought: string) => void;
+   
 }) {
     // bootstrap settings for modal 
     const [show, setShow] = useState(false);
     const onClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const[title, setTitle] = useState("");
+    const[thought, setThought] = useState("")
   
    
   
@@ -38,7 +38,7 @@ function PostForm ({
       aria-label="modalForm"
        show={show} 
        className={show === true ? "modal show" : "modal"}
-       onHide={onClose}>
+       onClick={onClose}>
 
         <Modal.Header closeButton>
           <Modal.Title>Share your thoughts...</Modal.Title>
@@ -49,8 +49,10 @@ function PostForm ({
             aria-label="form"
             onSubmit={(event) => {
             event.preventDefault();
-            onSubmit();
+            onSubmit(title, thought);
             onClose();
+            setTitle("");
+            setThought("");
               
         }}> 
 
@@ -65,10 +67,9 @@ function PostForm ({
             </label>
             <label>
                 <p>Thought:</p>
-                <input 
+                <textarea 
                 role="textbox2"
                 aria-label="thoughtInput"
-                type="text" 
                 className="thoughtInput" 
                 onChange={(event) => {setThought(event.target.value)}}/>
             </label>

@@ -7,16 +7,12 @@ import "./SocialPosts.css"
 
 function SocialPosts() {
     const [posts, setPosts] = useState(postsArray);
-    const[title, setTitle] = useState("");
-    const[thought, setThought] = useState("");
-
-
-    function onSubmit() {
+    
+    
+    function onSubmit(title: string, thought: string) {
         let posts2 = [...posts];
         posts2.unshift({title: title, thought: thought});
         setPosts(posts2)
-        setTitle("");
-        setThought("");
     }
 
     function deletePost(index: number) {
@@ -30,7 +26,7 @@ function SocialPosts() {
         <div>
             <h1>My Spooky Thoughts</h1> 
                 
-            <PostForm onSubmit={onSubmit} setTitle={setTitle} setThought={setThought} />
+            <PostForm onSubmit={onSubmit}/>
 
        <main>
            {posts.map((item,index) => <span key={index}>

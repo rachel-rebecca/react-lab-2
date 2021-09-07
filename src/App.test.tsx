@@ -39,46 +39,80 @@ test('spy function is called when delete button is pressed', () => {
   expect(spy).toHaveBeenCalled();
 });
 
-// ~~~~~ TEST THAT WONT PASS ~~~~~~
+// Post Form submit button sends correct form "post"
 test("onSubmit is called with correct Post object after submitting form", async () => {
-  // create spy fn for submit and spy fn for useStates
-  const spy = jest.fn();
-  
-  // const setState = jest.fn();
-  // const useStateSpy = jest.spyOn(React, "useState");
-  // mock implementation of setting title and thought
-  // spy.mockImplementation((init) => [init, spy]);
-  
-  render(<PostForm onSubmit={spy} setTitle={spy} setThought={spy}/>);
  
-    // had to firevent first to be able to access the form and test it
+  const spy = jest.fn();
+  // would need multiple spy fn if there were other useStates etc.
+  
+  render(<PostForm onSubmit={spy}/>);
+    // had to fireEvent first to be able to access the form and test it
   const show = screen.getByRole("button", {name: "showForm"});
   fireEvent.click(show);
   const form = screen.getByRole("form", {name: "form"});
+  
   // checking if form is available now
   expect(form).toBeInTheDocument();
+
   // filling out the form
   const titleEl = screen.getByRole("textbox1", {name: "titleInput"});
   fireEvent.change(titleEl, {target: {value: "test title"}});
-
   const thoughtEl = screen.getByRole("textbox2", {name: "thoughtInput"});
   fireEvent.change(thoughtEl, {target: {value: "test thought"}});
+
   // setting up submit button
-  
-  fireEvent.click( await screen.getByRole("button", {name: "onSubmit"}))
+  fireEvent.click(await screen.getByRole("button", {name: "onSubmit"}))
   
   // fireEvent.submit(form);
-  expect(spy).toBeCalledWith({title: "test title", thought: "test thought"});
+  expect(spy).toBeCalledWith("test title", "test thought");
 });
 
+// Second test case 
+test("onSubmit is called with correct Post object after submitting form", async () => {
+ 
+  const spy = jest.fn();
+  // would need multiple spy fn if there were other useStates etc.
+  
+  render(<PostForm onSubmit={spy}/>);
+    // had to fireEvent first to be able to access the form and test it
+  const show = screen.getByRole("button", {name: "showForm"});
+  fireEvent.click(show);
+  const form = screen.getByRole("form", {name: "form"});
 
-// test('calls onClose callback when close button is clicked', () => {
-//   const post: Post = {title: "Test Title", thought: "Test Thought"};
-//   const spy = jest.fn();
-//   render(<PostInList title={post.title} thought={post.thought} onDelete={spy}/>);
-//   const btn = screen.getByRole("button", {name: "onDelete"})
-//   fireEvent.click(btn)
-//   expect(spy).toHaveBeenCalled();
-// });
+  // checking if form is available now
+  expect(form).toBeInTheDocument();
+
+  // filling out the form
+  const titleEl = screen.getByRole("textbox1", {name: "titleInput"});
+  fireEvent.change(titleEl, {target: {value: "TeStTiTlE"}});
+  const thoughtEl = screen.getByRole("textbox2", {name: "thoughtInput"});
+  fireEvent.change(thoughtEl, {target: {value: "tEsTtHoUgHt"}});
+
+  // setting up submit button
+  fireEvent.click(await screen.getByRole("button", {name: "onSubmit"}))
+  
+  // fireEvent.submit(form);
+  expect(spy).toBeCalledWith("TeStTiTlE", "tEsTtHoUgHt");
+});
+
+// check if close button calls onClose fn. 
+// I used bootstrap for my modal/form so testing is different
+test('calls onClose callback when close button is clicked', () => {
+  const submitSpy = jest.fn();
+  const closeSpy = jest.fn();
+
+  render(<PostForm onSubmit={submitSpy}/>);
+  const show = screen.getByRole("button", {name: "showForm"});
+  fireEvent.click(show);
+  const form = screen.getByRole("form", {name: "form"});
+
+  // checking if form is available now
+  expect(form).toBeInTheDocument();
+  const btn = screen.getByRole("modal", {name: "modalForm"})
+  fireEvent.click(btn)
+  // when the form is not visible, it only have have class: 'modal-dialog'
+  // bootstrap added class name to modal
+  expect(btn).toHaveClass("modal-dialog");
+});
 
 
